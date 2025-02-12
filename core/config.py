@@ -1,6 +1,7 @@
 import secrets
 
 from pydantic_settings import BaseSettings
+from pydantic import BaseSettings  # For pydantic < 2.0
 
 
 class Settings(BaseSettings):
