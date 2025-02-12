@@ -32,7 +32,7 @@ jobs:
         with:
           host: 20.213.11.2
           username: azureuser
-          key: ${{ secrets.SSH_SSH_KEY }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
           port: 22
           script: |
             docker pull chrisjrleon10/fastapi-app:latest
