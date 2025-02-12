@@ -32,11 +32,10 @@ jobs:
         with:
           host: 20.213.11.2
           username: azureuser
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          key: ${{ secrets.SSH_SSH_KEY }}
           port: 22
           script: |
             docker pull your-dockerhub-username/fastapi-app:latest
             docker stop fastapi-app || true
             docker rm fastapi-app || true
             docker run -d -p 8000:8000 --name fastapi-app your-dockerhub-username/fastapi-app:latest
-            
