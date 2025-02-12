@@ -24,8 +24,8 @@ jobs:
 
       - name: Build and push Docker image
         run: |
-          docker build -t your-dockerhub-username/fastapi-app:latest .
-          docker push your-dockerhub-username/fastapi-app:latest
+          docker build -t chrisjrleon10/fastapi-app:latest .
+          docker push chrisjrleon10/fastapi-app:latest
 
       - name: Deploy to Server (SSH)
         uses: appleboy/ssh-action@v1.0.0
