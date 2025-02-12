@@ -35,7 +35,7 @@ jobs:
           key: ${{ secrets.SSH_SSH_KEY }}
           port: 22
           script: |
-            docker pull your-dockerhub-username/fastapi-app:latest
+            docker pull chrisjrleon10/fastapi-app:latest
             docker stop fastapi-app || true
             docker rm fastapi-app || true
-            docker run -d -p 8000:8000 --name fastapi-app your-dockerhub-username/fastapi-app:latest
+            docker run -d -p 8000:8000 --name fastapi-app chrisjrleon10/fastapi-app:latest
