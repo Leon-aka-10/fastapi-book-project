@@ -39,3 +39,4 @@ jobs:
             docker stop fastapi-app || true
             docker rm fastapi-app || true
             docker run -d -p 8080:8000 --name fastapi-app chrisjrleon10/fastapi-app:latest
+            
