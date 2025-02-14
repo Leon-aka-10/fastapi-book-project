@@ -13,15 +13,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Ensure latest changes are deployed
-        run: |
-          cd /home/azureuser/fastapi-book-project || exit 1  # Exit if directory doesn't exist
-          git fetch --all
-          git reset --hard origin/main
-          git pull origin main
-          sudo systemctl restart fastapi  # Restart FastAPI properly
-          sudo systemctl restart nginx  # Ensures Nginx recognizes the new app
-
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
@@ -44,16 +35,21 @@ jobs:
           key: ${{ secrets.SERVER_SSH_KEY }}
           port: 22
           script: |
-            cd /home/azureuser/fastapi-book-project || exit 1  # Ensure correct directory
+            cd ~/fastapi-book-project
             git fetch --all
             git reset --hard origin/main
             git pull origin main
             source venv/bin/activate
             pip install -r requirements.txt
-            sudo systemctl restart fastapi
-            sudo systemctl restart nginx
+
+            # Ensure /stage2 exists in main.py
+            grep -q "@app.get(\"/stage2\")" main.py || echo -e "\n@app.get(\"/stage2\")\nasync def stage2():\n    return {\"message\": \"welcome to stage 2\"}" >> main.py
+
             docker pull chrisjrleon10/fastapi-app:latest
             docker stop fastapi-app || true
             docker rm fastapi-app || true
             docker run -d -p 8080:8000 --name fastapi-app chrisjrleon10/fastapi-app:latest
+
             sleep 10  # Wait for the app to start
+            sudo service fastapi restart
+            sudo service nginx restart
