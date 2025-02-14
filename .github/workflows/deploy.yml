@@ -13,6 +13,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Ensure latest changes are deployed
+        run: |
+          cd fastapi-book-project/
+          git fetch --all
+          git reset --hard origin/main
+          git pull origin main
+          docker build -t fastapi-app .
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
@@ -39,4 +47,3 @@ jobs:
             docker stop fastapi-app || true
             docker rm fastapi-app || true
             docker run -d -p 8080:8000 --name fastapi-app chrisjrleon10/fastapi-app:latest
-            
