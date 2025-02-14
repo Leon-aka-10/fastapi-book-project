@@ -15,11 +15,11 @@ jobs:
 
       - name: Ensure latest changes are deployed
         run: |
-          script: |
-          cd /home/azureuser/fastapi-book-project
+          cd /home/azureuser/fastapi-book-project || exit 1  # Exit if directory doesn't exist
           git fetch --all
           git reset --hard origin/main
           git pull origin main
+          sudo systemctl restart fastapi  # Restart FastAPI properly
           sudo systemctl restart nginx  # Ensures Nginx recognizes the new app
 
       - name: Set up Docker Buildx
@@ -44,6 +44,14 @@ jobs:
           key: ${{ secrets.SERVER_SSH_KEY }}
           port: 22
           script: |
+            cd /home/azureuser/fastapi-book-project || exit 1  # Ensure correct directory
+            git fetch --all
+            git reset --hard origin/main
+            git pull origin main
+            source venv/bin/activate
+            pip install -r requirements.txt
+            sudo systemctl restart fastapi
+            sudo systemctl restart nginx
             docker pull chrisjrleon10/fastapi-app:latest
             docker stop fastapi-app || true
             docker rm fastapi-app || true
