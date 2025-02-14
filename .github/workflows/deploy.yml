@@ -35,6 +35,8 @@ jobs:
           key: ${{ secrets.SERVER_SSH_KEY }}
           port: 22
           script: |
+            sudo chown -R $USER:$USER /home/azureuser/fastapi-book-project/.git  # Change ownership
+            sudo chmod -R u+w /home/azureuser/fastapi-book-project/.git         # Grant write permissions
             cd ~/fastapi-book-project
             git fetch --all
             git reset --hard origin/main
@@ -42,14 +44,10 @@ jobs:
             source venv/bin/activate
             pip install -r requirements.txt
 
-            # Ensure /stage2 exists in main.py
-            grep -q "@app.get(\"/stage2\")" main.py || echo -e "\n@app.get(\"/stage2\")\nasync def stage2():\n    return {\"message\": \"welcome to stage 2\"}" >> main.py
-
             docker pull chrisjrleon10/fastapi-app:latest
             docker stop fastapi-app || true
             docker rm fastapi-app || true
             docker run -d -p 8080:8000 --name fastapi-app chrisjrleon10/fastapi-app:latest
 
             sleep 10  # Wait for the app to start
-            sudo service fastapi restart
             sudo service nginx restart
