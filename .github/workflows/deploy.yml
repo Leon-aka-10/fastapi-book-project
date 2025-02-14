@@ -47,5 +47,4 @@ jobs:
             docker rm fastapi-app || true
             docker run -d -p 8080:8000 --name fastapi-app chrisjrleon10/fastapi-app:latest
             sleep 10  # Wait for the app to start
-            sudo systemctl restart fastapi || echo "FastAPI service not found, skipping..."
             sudo systemctl restart nginx
