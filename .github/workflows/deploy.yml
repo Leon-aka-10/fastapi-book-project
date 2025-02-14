@@ -38,16 +38,13 @@ jobs:
             sudo chown -R $USER:$USER /home/azureuser/fastapi-book-project/.git  # Change ownership
             sudo chmod -R u+w /home/azureuser/fastapi-book-project/.git         # Grant write permissions
             cd ~/fastapi-book-project
-            git fetch --all
-            git reset --hard origin/main
-            git pull origin main
+            sudo git fetch --all
+            sudo git reset --hard origin/main  # Use sudo to override permission issues
+            sudo git pull origin main
             source venv/bin/activate
-            pip install -r requirements.txt
-
             docker pull chrisjrleon10/fastapi-app:latest
             docker stop fastapi-app || true
             docker rm fastapi-app || true
             docker run -d -p 8080:8000 --name fastapi-app chrisjrleon10/fastapi-app:latest
-
             sleep 10  # Wait for the app to start
             sudo service nginx restart
