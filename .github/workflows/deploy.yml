@@ -15,7 +15,8 @@ jobs:
 
       - name: Ensure latest changes are deployed
         run: |
-          cd ~/home/azureuser/fastapi-book-project
+          script: |
+          cd /home/azureuser/fastapi-book-project
           git fetch --all
           git reset --hard origin/main
           git pull origin main
